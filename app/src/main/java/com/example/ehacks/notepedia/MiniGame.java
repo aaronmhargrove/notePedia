@@ -68,7 +68,8 @@ public class MiniGame extends AppCompatActivity {
         }
     }
 
-    // Add one to player one score and update GUI
+    // Listener for player 1 button.
+    // Add one to player one score and update GUI.
     public void playerOne(View view) {
         //View v2 = new View(MiniGame.class);
         // Only allow the game to continue of nobody has won yet
@@ -81,7 +82,9 @@ public class MiniGame extends AppCompatActivity {
                 win1.setVisibility(View.VISIBLE);
         }
     }
-    // Add one to player two score and update GUI
+
+    // Listener for player 2 button.
+    // Add one to player two score and update GUI.
     public void playerTwo(View view) {
         // Only allow the game to continue of nobody has won yet
         if(scoreOne < 100 && scoreTwo < 100){
