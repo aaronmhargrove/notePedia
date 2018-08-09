@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/gameDirection"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/minigamebg"
+    tools:context="com.example.ehacks.notepedia.MiniGame">
+
+    <Button
+        android:id="@+id/playerTwo"
+        android:layout_width="88dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="36dp"
+        android:elevation="24dp"
+        android:onClick="playerTwo"
+        android:rotation="180"
+        android:text="Player 2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/playerOne"
+        android:layout_width="88dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="36dp"
+        android:layout_marginStart="160dp"
+        android:elevation="24dp"
+        android:onClick="playerOne"
+        android:text="Player 1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="283dp"
+        android:layout_height="53dp"
+        android:layout_marginBottom="60dp"
+        android:layout_marginStart="64dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Score: 0"
+        android:textAlignment="center"
+        android:textColor="@android:color/background_light"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/playerOne"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="283dp"
+        android:layout_height="53dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="60dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:rotation="180"
+        android:text="Score: 0"
+        android:textAlignment="center"
+        android:textColor="@android:color/background_light"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playerTwo" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="158dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="292dp"
+        android:layout_marginTop="324dp"
+        android:rotation="90"
+        android:text="First to 100 Wins!"
+        android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
+        android:textSize="18sp"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/winner1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginStart="156dp"
+        android:text="WINNER!"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium.Inverse"
+        android:textSize="24sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/editText2"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/winner2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="156dp"
+        android:layout_marginTop="20dp"
+        android:rotation="180"
+        android:text="WINNER!"
+        android:textAlignment="center"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium.Inverse"
+        android:textSize="24sp"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText" />
+</android.support.constraint.ConstraintLayout>
