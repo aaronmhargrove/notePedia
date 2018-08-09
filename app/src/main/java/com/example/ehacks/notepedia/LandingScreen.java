@@ -34,7 +34,7 @@ public class LandingScreen extends AppCompatActivity {
         animationDrawable.start();
     }
 
-    // Transfers the current view from he landing page to the search page
+    // Listener for the "Begin Learning" button. Starts SearchScreen activity
     public void knowledge(View view) {
         Intent intent = new Intent(this, SearchScreen.class);
         startActivity(intent);

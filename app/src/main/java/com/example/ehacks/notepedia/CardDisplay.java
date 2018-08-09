@@ -64,6 +64,7 @@ public class CardDisplay extends AppCompatActivity {
     }
 
     // Called when user selects the "next" button on activity_card_display
+    // Displays next card in the array.
     public void viewNextCard(View view){
         count++;
         // If at the end of the array, go to the beginning
@@ -79,6 +80,7 @@ public class CardDisplay extends AppCompatActivity {
     }
 
     // Called when user selects the "previous" button on activity_card_display
+    // Displays previous card in the array.
     public void viewPreviousCard(View view){
         count--;
         // If at the beginning of the array, go to the end (length - 1)
