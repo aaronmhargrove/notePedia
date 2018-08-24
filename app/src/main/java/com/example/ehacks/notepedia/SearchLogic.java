@@ -21,10 +21,10 @@ public class SearchLogic {
     // Class ctor
     public SearchLogic(){}
 
+
     // Searches for wikipedia page of user's search  - google -> wiki -> summarize.
-    // Takes a string, which is the user's search.
-    // Returns a string array, which is the result of their search (to be displayed on "cards".)
-    public String[] searchWiki (String searchString) throws ExecutionException, InterruptedException, JSONException {
+    // Takes a string, which is the user's search. Returns a string array, which is the result of their search
+    public String[] searchWiki (String searchString) throws ExecutionException, InterruptedException {
         // Google [user input] + "wikipedia" -> acts as a spell check and gives most relevant page
         String searchData = searchString + " wikipedia";
         searchData = searchData.replaceAll(" ", "_");
@@ -37,17 +37,27 @@ public class SearchLogic {
         String apiUrl = "http://api.smmry.com/&SM_API_KEY=A47BAB4439&SM_LENGTH=40&SM_WITH_BREAK&SM_URL=" + url;
         String result = new SearchLogic.JSONRequest().execute(apiUrl).get();
 
-        // Create json object with result string
-        JSONObject jsonObj = new JSONObject(result);
-        String[] cardsText;
+        return getCards(result);
+    }
 
-        // If there is no error with summarization
-        if(!result.contains("sm_api_error")){
-            String jsonString = jsonObj.getString("sm_api_content");
-            String regex = "[BREAK]";
-            cardsText = jsonString.split(Pattern.quote(regex));
+    // Creates the "cards" (array with result strings)
+    // Takes results of api call as string, returns string array
+    public String[] getCards(String apiResults){
+        String[] cardsText;
+        try{
+            // If there is no error with summarization
+            if(apiResults != null && !apiResults.contains("sm_api_error" )){
+                JSONObject jsonObj = new JSONObject(apiResults);
+                String jsonString = jsonObj.getString("sm_api_content");
+                String regex = "[BREAK]";
+                cardsText = jsonString.split(Pattern.quote(regex));
+            }
+            else{
+                cardsText = new String[] {"ERROR"};
+            }
         }
-        else{
+        catch(JSONException e){
+            e.printStackTrace();
             cardsText = new String[] {"ERROR"};
         }
 
@@ -64,12 +74,25 @@ public class SearchLogic {
         String unformattedTitle = new SearchLogic.getRandom().execute(titleApiUrl).get();
 
         // Ensure correct title format (use JSONRequest with wiki api)
-        try{
-            // Get json from wiki api
-            String wikiApiJsonString = new SearchLogic.JSONRequest().execute(titleApiUrl + unformattedTitle).get();
+        String wikiApiJsonString = new SearchLogic.JSONRequest().execute(titleApiUrl + unformattedTitle).get();
 
+        if (wikiApiJsonString != null) {
+            formattedTitle = parseFormattedTitle(wikiApiJsonString); // Get correct title
+        }
+        else {
+            formattedTitle = "Sailboat"; // Gives user something instead of empty string
+        }
+
+        return formattedTitle;
+    }
+
+    // Parses out title from wiki API. Takes api response string and returns string title
+    public String parseFormattedTitle(String apiResponse){
+        String title;
+
+        try {
             // Create json boj with returned string and isolate the "pages" element
-            JSONObject allJson = new JSONObject(wikiApiJsonString);
+            JSONObject allJson = new JSONObject(apiResponse);
             JSONObject queryJson = allJson.optJSONObject("query");
             JSONObject pagesJson = queryJson.optJSONObject("pages");
 
@@ -81,14 +104,14 @@ public class SearchLogic {
             JSONObject pageIdJson = pagesJson.getJSONObject(key);
 
             // Get correct title
-            formattedTitle = pageIdJson.getString("title");
+            title = pageIdJson.getString("title");
         }
         catch(JSONException e){
             e.printStackTrace();
-            formattedTitle = "Sailboat"; // Gives user something instead of empty string
+            title = "Sailboat"; // Gives user something instead of empty string
         }
 
-        return formattedTitle;
+        return title;
     }
 
     // Async Class. Random search function.
@@ -127,8 +150,8 @@ public class SearchLogic {
 
                 // Get name of page
                 rawTitle = con.toString();
-                int temp = rawTitle.indexOf("wiki/") + 5;
-                result = rawTitle.substring(temp);
+                int index = rawTitle.indexOf("wiki/") + 5;
+                result = rawTitle.substring(index);
 
                 con.disconnect();
             }
@@ -217,31 +240,24 @@ public class SearchLogic {
         private static final int READ_TIMEOUT = 15000;
         private static final int CONNECTION_TIMEOUT = 15000;
 
-        // Read through JSON file
+        // Read through json response
         @Override
         protected String doInBackground(String... params){
             String stringUrl = params[0];
             String result;
             String inputLine;
             try {
-                // Create a URL object holding our url
                 URL myUrl = new URL(stringUrl);
-
-                // Create a connection
                 HttpURLConnection connection =(HttpURLConnection)myUrl.openConnection();
 
                 // Set method and timeouts
                 connection.setRequestMethod(REQUEST_METHOD);
                 connection.setReadTimeout(READ_TIMEOUT);
                 connection.setConnectTimeout(CONNECTION_TIMEOUT);
-
-                // Connect to url
                 connection.connect();
 
-                // Create a new InputStreamReader
+                // Set up reader
                 InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
-
-                // Create a new buffered reader and String Builder
                 BufferedReader reader = new BufferedReader(streamReader);
                 StringBuilder stringBuilder = new StringBuilder();
 
@@ -260,8 +276,10 @@ public class SearchLogic {
                 e.printStackTrace();
                 result = null;
             }
+
             return result;
         }
+        @Override
         protected void onPostExecute(String result){
             super.onPostExecute(result);
         }
