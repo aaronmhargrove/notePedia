@@ -6,21 +6,11 @@
 package com.example.ehacks.notepedia;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Iterator;
 import java.util.concurrent.ExecutionException;
-import java.util.regex.Pattern;
-import org.json.JSONException;
-import org.json.*;
 
 // SearchScreen class
 public class SearchScreen extends AppCompatActivity {
@@ -56,7 +46,7 @@ public class SearchScreen extends AppCompatActivity {
     // Listener for "Search" button.
     // Takes user search from UI and passes it to SearchLogic class to handle business logic.
     // Starts the CardDisplay activity when it gets returned data from SearchLogic.
-    public void initiateSearch(View view) throws ExecutionException, InterruptedException, JSONException {
+    public void initiateSearch(View view) throws ExecutionException, InterruptedException {
         TextView searchQuarry = findViewById(R.id.searchText);
         String searchString = searchQuarry.getText().toString();
 
