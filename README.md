@@ -24,6 +24,8 @@ My part in this project dealt with all UI and most of the search functionality. 
 The next step for this project is to build our own data summarizer. The SMMRY api only allows 100 free requests per day per api key, which would cause problems if we ever wanted to release notePedia on the Google Play Store.
 
 ### To Run:
+NOTE: Since this was developed, Google has changed how their search works, so this no longer works correctly. I will address this soon when I have the opportunity.
+
 To run the program, it may be emulated on a device through Android Studio, or the apk may be downloaded onto an Android device. 
 ##### To download apk from Android device:
 - Ensure that apps from unknown sources are allowed (typically in security settings.)
