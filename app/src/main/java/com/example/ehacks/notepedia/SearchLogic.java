@@ -202,24 +202,30 @@ public class SearchLogic {
                 }
 
                 BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String jsonString = "";
+                for(String line; (line = in.readLine()) != null; jsonString += line);
 
-                // Search through google results page to get to wiki page
-                while ((inputLine = in.readLine()) != null) {
-                    // If first match found -> update result and exit loop
-                    if (inputLine.toLowerCase().matches(".*href=\"https://en.wikipedia.org/wiki/.*")) {
-                        result = inputLine;
-                        int index = result.indexOf("https://en.wikipedia.org/wiki/");
-                        result= result.substring(index, index+500);
-                        result = result.substring(0,result.indexOf("\""));
-                        result = result.replace("https://en.wikipedia.org/wiki/","https://en.m.wikipedia.org/wiki/");
-                        break;
-                    }
-                }
+                JSONObject respJson = new JSONObject(jsonString);
+                result = respJson.getJSONArray("items").getJSONObject(0).getString("link");
+
+
+//                // Search through google results page to get to wiki page
+//                while ((inputLine = in.readLine()) != null) {
+//                    // If first match found -> update result and exit loop
+//                    if (inputLine.toLowerCase().matches(".*href=\"https://en.wikipedia.org/wiki/.*")) {
+//                        result = inputLine;
+//                        int index = result.indexOf("https://en.wikipedia.org/wiki/");
+//                        result= result.substring(index, index+500);
+//                        result = result.substring(0,result.indexOf("\""));
+//                        result = result.replace("https://en.wikipedia.org/wiki/","https://en.m.wikipedia.org/wiki/");
+//                        break;
+//                    }
+//                }
 
                 in.close();
                 con.disconnect();
             }
-            catch(IOException e){
+            catch(Exception e){
                 e.printStackTrace();
                 result = null;
             }
