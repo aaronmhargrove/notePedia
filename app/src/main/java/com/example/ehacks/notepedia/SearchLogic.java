@@ -27,8 +27,8 @@ public class SearchLogic {
     public String[] searchWiki (String searchString) throws ExecutionException, InterruptedException {
         // Google [user input] + "wikipedia" -> acts as a spell check and gives most relevant page
         String searchData = searchString + " wikipedia";
-        searchData = searchData.replaceAll(" ", "_");
-        String searchUrl = "https://google.com/search?q=" + searchData;
+        searchData = searchData.replaceAll(" ", "+");
+        String searchUrl = "https://www.googleapis.com/customsearch/v1?key=AIzaSyBhX7tiQmxvjqWnTUJf3MOdMmt5EUI8RKE&cx=001142268581179224968:vh2e9kgipgr&q=" + searchData;
 
         // Get proper url of wiki page
         String url = new SearchLogic.searchTheWeb().execute(searchUrl).get();
@@ -36,6 +36,7 @@ public class SearchLogic {
         // Use SMMRY api to get data from wiki page (json)
         String apiUrl = "http://api.smmry.com/&SM_API_KEY=A47BAB4439&SM_LENGTH=40&SM_WITH_BREAK&SM_URL=" + url;
         String result = new SearchLogic.JSONRequest().execute(apiUrl).get();
+        System.out.println(result);
 
         return getCards(result);
     }
@@ -202,24 +203,16 @@ public class SearchLogic {
                 }
 
                 BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String jsonString = "";
+                for(String line; (line = in.readLine()) != null; jsonString += line);
 
-                // Search through google results page to get to wiki page
-                while ((inputLine = in.readLine()) != null) {
-                    // If first match found -> update result and exit loop
-                    if (inputLine.toLowerCase().matches(".*href=\"https://en.wikipedia.org/wiki/.*")) {
-                        result = inputLine;
-                        int index = result.indexOf("https://en.wikipedia.org/wiki/");
-                        result= result.substring(index, index+500);
-                        result = result.substring(0,result.indexOf("\""));
-                        result = result.replace("https://en.wikipedia.org/wiki/","https://en.m.wikipedia.org/wiki/");
-                        break;
-                    }
-                }
+                JSONObject respJson = new JSONObject(jsonString);
+                result = respJson.getJSONArray("items").getJSONObject(0).getString("link");
 
                 in.close();
                 con.disconnect();
             }
-            catch(IOException e){
+            catch(Exception e){
                 e.printStackTrace();
                 result = null;
             }
